@@ -11,9 +11,10 @@ url=""
 mode=""
 lang="en"
 name=""
+path=""
 
 # Parse the named arguments
-while getopts "f:u:m:l:n:" opt; do
+while getopts "f:u:m:l:n:p:" opt; do
   case $opt in
     f) file="$OPTARG"
     ;;
@@ -25,17 +26,21 @@ while getopts "f:u:m:l:n:" opt; do
     ;;
     n) name="$OPTARG"
     ;;
+    p) path="$OPTARG"
+    ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
   esac
 done
 
-echo "name is $name"
-echo "url is $url"
-
 # Check that either a file or a URL was specified
 if [ -z "$url" ] && [ -z "$name" ]; then
   echo "Either a Url or a Name must be specified"
+  exit 1
+fi
+
+if [ -z "$path" ]; then
+  echo "ERROR: Path must be specified"
   exit 1
 fi
 
@@ -49,7 +54,13 @@ fi
 if [ ! -z "$name" ]; then
   url="https://youtu.be/$name"
   echo "Using $url as url"
-  echo "Using file path as daniellekirsty/$name"
+fi
+
+transcripts_dir="../../../transcripts/$path"
+
+if [ ! -d "$transcripts_dir" ]; then
+    echo "Output path specified of $transcripts_dir does not exist yet. Creating."
+    mkdir $transcripts_dir
 fi
 
 if [ ! -z "$url" ]; then
@@ -62,7 +73,7 @@ msg "Converting mp3 to wav 16kHz..."
 ffmpeg -i "$audio_file_name.mp3" -ar 16000 -ac 1 -c:a pcm_s16le "$audio_file_name.wav" -nostats -loglevel 16 -y
 
 msg "Transcribing using model $model..."
-whisper.cpp/main -f "$audio_file_name.wav" -otxt -of "daniellekirsty/$name" -nt -pp -m whisper.cpp/models/ggml-$model.bin -l $lang
+whisper.cpp/main -f "$audio_file_name.wav" -otxt -of "$transcripts_dir/$name" -nt -pp -m whisper.cpp/models/ggml-$model.bin -l $lang
 
 msg "All DONE!"
 end_time="$(date -u +%s)"
