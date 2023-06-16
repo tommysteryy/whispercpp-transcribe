@@ -53,7 +53,6 @@ fi
 
 if [ ! -z "$name" ]; then
   url="https://youtu.be/$name"
-  echo "Using $url as url"
 fi
 
 transcripts_dir="../../../transcripts/$path"
@@ -81,23 +80,9 @@ secs="$(($end_time-$start_time))"
 elapsed=$(printf '%02dh:%02dm:%02ds\n' $(($secs/3600)) $(($secs%3600/60)) $(($secs%60)))
 msg "Total elapsed time: $elapsed"
 
-
-# msg "Formating output..."
-# cmd="python3 format_and_summarize.py"
-# if [ ! -z "$file" ]; then
-#   duration=$(ffmpeg -i "$audio_file_name.mp3" 2>&1 | grep Duration | awk -F'[:,.]' '{print $2":"$3":"$4}')
-#   cmd+=" -f $audio_file_name -d $duration"
-# fi
-# if [ "$summary" = true ]; then
-#     cmd+=" -s"
-# fi
-# eval $cmd
-
-
 msg "Clean up..."
 rm -f temp.mp3
 rm -f $audio_file_name.wav
 rm -f temp.info.json
 rm -f temp.webm
-# rm -f transcript.txt
 
