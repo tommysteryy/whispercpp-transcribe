@@ -64,6 +64,12 @@ if [ ! -z "$name" ]; then
   url="https://youtu.be/$name"
 fi
 
+# Check if a transcript for "$name" already exists.
+if grep -Fxq "$name" "../completed_videos.txt" ; then
+  echo "File $name.txt already completed. Stopping job."
+  exit 0
+fi
+
 # Define the directory for transcripts.
 transcripts_dir="../../../transcripts/$path"
 
@@ -87,6 +93,10 @@ ffmpeg -i "$audio_file_name.mp3" -ar 16000 -ac 1 -c:a pcm_s16le "$audio_file_nam
 # Use the model to transcribe the audio.
 msg "Transcribing using model $model..."
 whisper.cpp/main -f "$audio_file_name.wav" -otxt -of "$transcripts_dir/$name" -nt -pp -m whisper.cpp/models/ggml-$model.bin -l $lang
+
+# After successful transcription, add the name to processed videos list
+echo "$name" >> "../completed_videos.txt"
+echo "Added $name to the completed videos."
 
 # End of the script operations.
 msg "All DONE!"
