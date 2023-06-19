@@ -51,6 +51,12 @@ if [ -z "$path" ]; then
   exit 1
 fi
 
+# Check if a model was specified.
+if [ -z "$model" ]; then
+  echo "Model not specified. Defaulting to small.en"
+  model="small.en"
+fi
+
 # Assign a name to the audio file.
 if [ ! -z "$file" ] 
 then
