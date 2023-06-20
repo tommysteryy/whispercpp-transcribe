@@ -71,7 +71,7 @@ if [ ! -z "$name" ]; then
 fi
 
 # Check if a transcript for "$name" already exists.
-if grep -Fxq "$name" "../completed_videos.txt" ; then
+if grep -Fxq -- "$name" "../completed_videos.txt" ; then
   echo "File $name.txt already completed. Stopping job."
   exit 0
 fi
