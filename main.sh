@@ -51,6 +51,17 @@ if [ -z "$path" ]; then
   exit 1
 fi
 
+# If a name is specified, form the URL.
+if [ ! -z "$name" ]; then
+  url="https://youtu.be/$name"
+fi
+
+# Check if a transcript for "$name" already exists.
+if grep -Fxq -- "$name" "../completed_videos.txt" ; then
+  echo "File $name.txt already completed. Stopping job."
+  exit 0
+fi
+
 # Check if a model was specified.
 if [ -z "$model" ]; then
   echo "Model not specified. Defaulting to small.en"
@@ -65,16 +76,6 @@ else
   audio_file_name="temp"
 fi
 
-# If a name is specified, form the URL.
-if [ ! -z "$name" ]; then
-  url="https://youtu.be/$name"
-fi
-
-# Check if a transcript for "$name" already exists.
-if grep -Fxq -- "$name" "../completed_videos.txt" ; then
-  echo "File $name.txt already completed. Stopping job."
-  exit 0
-fi
 
 # Define the directory for transcripts.
 transcripts_dir="../../../transcripts/$path"
