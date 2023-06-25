@@ -57,7 +57,7 @@ if [ ! -z "$name" ]; then
 fi
 
 # Check if a transcript for "$name" already exists.
-if grep -Fxq -- "$name" "../completed_videos.txt" ; then
+if grep -Fxq -- "$name" "../completed_videos_pender.txt" ; then
   echo "File $name.txt already completed. Stopping job."
   exit 0
 fi
@@ -73,7 +73,7 @@ if [ ! -z "$file" ]
 then
   audio_file_name=$file
 else
-  audio_file_name="temp"
+  audio_file_name="temp_pender"
 fi
 
 
@@ -102,7 +102,7 @@ msg "Transcribing using model $model..."
 whisper.cpp/main -f "$audio_file_name.wav" -otxt -of "$transcripts_dir/$name" -nt -pp -m whisper.cpp/models/ggml-$model.bin -l $lang -p 8
 
 # After successful transcription, add the name to processed videos list
-echo "$name" >> "../completed_videos.txt"
+echo "$name" >> "../completed_videos_pender.txt"
 echo "Added $name to the completed videos."
 
 # End of the script operations.
@@ -116,7 +116,7 @@ msg "Total elapsed time: $elapsed"
 
 # Clean up temporary files.
 msg "Clean up..."
-rm -f temp.mp3
+rm -f $audio_file_name.mp3
 rm -f $audio_file_name.wav
-rm -f temp.info.json
-rm -f temp.webm
+rm -f $audio_file_name.info.json
+rm -f $audio_file_name.webm

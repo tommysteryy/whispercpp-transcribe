@@ -36,13 +36,13 @@ fi
 # cd whispercpp-transcribe
 
 # The file from which we will read the data
-inputFile="../curr_video_list_cs-server.txt"
+inputFile="../curr_video_list_pender.txt"
 
 # This loop will continue as long as there are lines to be read from the file
 # We're using file descriptor 3 instead of stdin to avoid interference during subprocess calls.
 while IFS= read -r -u 3 line; do
     # Run the main.sh script with the current line, chosen model, and path as arguments
-    ./main.sh -n "$line" -m "$model" -p "$path"
+    ./main-pender.sh -n "$line" -m "$model" -p "$path"
 done 3<"$inputFile"
 
 # Exit the script
