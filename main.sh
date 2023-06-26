@@ -86,6 +86,8 @@ if [ ! -d "$transcripts_dir" ]; then
     mkdir $transcripts_dir
 fi
 
+echo "Transcript will be saved to $transcripts_dir/$name"
+
 # If a URL is specified, extract the audio from it.
 if [ ! -z "$url" ]; then
   echo "URL: $url"
