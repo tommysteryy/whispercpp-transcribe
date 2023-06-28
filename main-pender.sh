@@ -80,6 +80,8 @@ fi
 # Define the directory for transcripts.
 transcripts_dir="../../../transcripts/$path"
 
+echo "File being stored to $transcripts_dir/$name"
+
 # If the directory doesn't exist, create it.
 if [ ! -d "$transcripts_dir" ]; then
     echo "Output path specified of $transcripts_dir does not exist yet. Creating."
